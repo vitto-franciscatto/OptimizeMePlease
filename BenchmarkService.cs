@@ -98,35 +98,37 @@ namespace OptimizeMePlease
             return finalAuthors;
         }
 
-        //[Benchmark]
-        //public List<AuthorDTO_Optimized> GetAuthors_Optimized()
-        //{
-        //    using var dbContext = new AppDbContext();
+        [Benchmark]
+        public List<AuthorDTO_Optimized> GetAuthors_Optimized()
+        {
+            using var dbContext = new AppDbContext();
 
-        //    var date = new DateTime(1900, 1, 1);
+            var date = new DateTime(1900, 1, 1);
 
-        //    return dbContext.Authors
-        //        .IncludeOptimized(x => x.Books.Where(b => b.Published < date))
-        //        .AsNoTracking()
-        //        .Where(x => x.Country == "Serbia" && x.Age == 27)
-        //        .OrderByDescending(x => x.BooksCount)
-        //        .Take(2)
-        //        .Select(x => new AuthorDTO_Optimized
-        //        {
-        //            FirstName = x.User.FirstName,
-        //            LastName = x.User.LastName,
-        //            Email = x.User.Email,
-        //            UserName = x.User.UserName,
-        //            Books = x.Books.Select(y => new BookDTO_Optimized
-        //            {
-        //                Title = y.Name,
-        //                PublishedYear = y.Published.Year
-        //            }),
-        //            Age = x.Age,
-        //            Country = x.Country,
-        //        })
-        //        .ToList();
-        //}
+            var authors = dbContext.Authors
+                .Where(x => x.Country == "Serbia" && x.Age == 27)
+                .OrderByDescending(x => x.BooksCount)
+                .Take(2)
+                .Select(x => new AuthorDTO_Optimized
+                {
+                    FirstName = x.User.FirstName,
+                    LastName = x.User.LastName,
+                    Email = x.User.Email,
+                    UserName = x.User.UserName,
+                    Books = x.Books.Select(y => new BookDTO_Optimized
+                    {
+                        Title = y.Name,
+                        PublishedYear = y.Published.Year
+                    }),
+                    Age = x.Age,
+                    Country = x.Country,
+                })
+                .ToList();
+
+            authors.ForEach(_ => _.Books = _.Books.Where(b => b.PublishedYear < 1900));
+
+            return authors;
+        }
 
         //[Benchmark]
         public List<AuthorDTO_OptimizedStruct> GetAuthors_Optimized_Struct()

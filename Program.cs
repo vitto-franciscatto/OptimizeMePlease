@@ -36,7 +36,7 @@ namespace OptimizeMePlease
 
         public static void IWillPopulateData()
         {
-            string sqlConnectionString = @"Server=localhost;Database=OptimizeMePlease;Trusted_Connection=True;Integrated Security=true;MultipleActiveResultSets=true";
+            string sqlConnectionString = @"Server=(LocalDB)\MSSQLLocalDB;Database=OptimizeMePlease;Trusted_Connection=True;Integrated Security=true;MultipleActiveResultSets=true";
 
             string workingDirectory = Environment.CurrentDirectory;
             string path = Path.Combine(Directory.GetParent(workingDirectory).Parent.Parent.FullName, @"script.sql");
